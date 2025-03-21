@@ -43,7 +43,7 @@ const UserAvatar = ({ name }) => {
           </div>
           <div className="text-xl font-medium">{name}</div>
           <div>example@gmail.com</div>
-          <Button className="w-30 rounded-lg bg-gray-200 hover:bg-gray-300 font-medium">
+          <Button primary rounded className="w-30 hover:bg-gray-300">
             Sign Out
           </Button>
         </div>

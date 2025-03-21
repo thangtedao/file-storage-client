@@ -1,7 +1,8 @@
+import classNames from "classnames";
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 
-const Modal = ({ onClose, children, actionBar }) => {
+const Modal = ({ onClose, children, actionBar, className }) => {
   useEffect(() => {
     document.body.classList.add("overflow-hidden");
 
@@ -10,13 +11,18 @@ const Modal = ({ onClose, children, actionBar }) => {
     };
   }, []);
 
+  const classes = classNames(
+    className,
+    "fixed inset-y-40 inset-x-100 p-10 bg-white min-w-80 min-h-80"
+  );
+
   return ReactDOM.createPortal(
-    <div>
+    <div className="flex justify-center items-center">
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-gray-300 opacity-80"
+        className="fixed inset-0 bg-gray-300 opacity-30"
       ></div>
-      <div className="fixed inset-40 p-10 bg-white">
+      <div className={classes}>
         <div className="flex flex-col justify-between h-full">
           {children}
           <div className="flex justify-end">{actionBar}</div>

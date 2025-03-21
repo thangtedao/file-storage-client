@@ -45,18 +45,20 @@ function Menu({ options, label }) {
   });
 
   return (
-    <div ref={divEl} className="w-48 relative">
+    <div ref={divEl} className="w-48">
       <Panel
         className="flex justify-center items-center shadow cursor-pointer rounded-lg border-gray-200 py-3 mt-8 hover:bg-gray-100"
         onClick={handleClick}
       >
         {label || "Menu"}
       </Panel>
-      {isOpen && (
-        <Panel className="absolute top-full mt-3 border-none shadow">
-          {renderedOptions}
-        </Panel>
-      )}
+      <div className="relative">
+        {isOpen && (
+          <Panel className="absolute top-full mt-3 border-none shadow">
+            {renderedOptions}
+          </Panel>
+        )}
+      </div>
     </div>
   );
 }

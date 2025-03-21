@@ -5,29 +5,41 @@ import Dashboard from "./pages/Dashboard";
 import FilesPage from "./pages/FilesPage";
 import RecentPage from "./pages/RecentPage";
 import TrashPage from "./pages/TrashPage";
+import ErrorPage from "./pages/ErrorPage";
+import FileSharePage from "./pages/FileSharePage";
+import SearchPage from "./pages/SearchPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
         element: <Dashboard />,
       },
       {
-        path: "/files",
+        path: "files",
         element: <FilesPage />,
       },
       {
-        path: "/recent",
+        path: "recent",
         element: <RecentPage />,
       },
       {
-        path: "/trash",
+        path: "trash",
         element: <TrashPage />,
       },
+      {
+        path: "search",
+        element: <SearchPage />,
+      },
     ],
+  },
+  {
+    path: "/share",
+    element: <FileSharePage />,
   },
 ]);
 

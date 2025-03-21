@@ -20,6 +20,7 @@ const SideBar = ({ className }) => {
     { label: "Files", path: "/files", icon: <GoFile /> },
     { label: "Recent", path: "/recent", icon: <GoClock /> },
     { label: "Trash", path: "/trash", icon: <GoTrash /> },
+    { label: "Share", path: "/share", icon: <GoTrash /> },
   ];
 
   const renderedLinks = links.map((link) => {

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import Table from "../components/Table";
 import Panel from "../components/Panel";
-import Modal from "../components/Modal";
-import Button from "../components/Button";
 import {
   HiOutlineDotsHorizontal,
   HiDownload,
@@ -12,7 +10,7 @@ import {
 import FileMenu from "../components/FileMenu";
 import FileShareModal from "../components/FileShareModal";
 
-const FilesPage = () => {
+const SearchPage = () => {
   const [fileShare, setFileShare] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -182,7 +180,7 @@ const FilesPage = () => {
 
   return (
     <div className="flex flex-col">
-      <p className="font-normal text-2xl mb-6">All Files</p>
+      <p className="font-normal text-2xl mb-6">Search Results</p>
       <Panel className="border-none rounded-lg p-3">
         <Table data={files} config={config} keyFn={keyFn} />
       </Panel>
@@ -193,4 +191,4 @@ const FilesPage = () => {
   );
 };
 
-export default FilesPage;
+export default SearchPage;

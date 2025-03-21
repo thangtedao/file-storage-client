@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import Panel from "../components/Panel";
 import Table from "../components/Table";
+import Button from "../components/Button";
+import Modal from "../components/Modal";
 
 const TrashPage = () => {
+  const [showModal, setShowModal] = useState(false);
+
   const files = [
     {
       id: 1,
@@ -48,6 +52,29 @@ const TrashPage = () => {
     },
   ];
 
+  const handleClose = () => {
+    setShowModal(false);
+  };
+
+  const handleOpen = () => {
+    setShowModal(true);
+  };
+
+  const handleDelete = () => {
+    console.log("Deleted");
+  };
+
+  const actionBar = (
+    <div className="flex justify-between w-full">
+      <Button danger rounded onClick={handleDelete}>
+        OK
+      </Button>
+      <Button primary rounded onClick={handleClose}>
+        Cancel
+      </Button>
+    </div>
+  );
+
   const config = [
     {
       label: "Name",
@@ -71,10 +98,20 @@ const TrashPage = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="font-normal text-2xl mb-6">Trash</div>
-      <Panel className="border-none rounded-lg">
+      <div className="flex justify-between">
+        <div className="font-normal text-2xl mb-6">Trash</div>
+        <Button primary rounded className="h-10" onClick={handleOpen}>
+          Clear Trash
+        </Button>
+      </div>
+      <Panel className="border-none rounded-lg p-3">
         <Table data={files} config={config} keyFn={keyFn} />
       </Panel>
+      {showModal && (
+        <Modal onClose={handleClose} actionBar={actionBar}>
+          <div className="text-2xl font-bold">Are you sure ?</div>
+        </Modal>
+      )}
     </div>
   );
 };
