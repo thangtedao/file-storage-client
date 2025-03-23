@@ -9,6 +9,7 @@ export const register = async (data) => {
     await apiClient.post("/auth/register", data);
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
@@ -17,6 +18,7 @@ export const login = async (username, password) => {
     await apiClient.post("/auth/login", { username, password });
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
@@ -25,13 +27,15 @@ export const logout = async () => {
     await apiClient.get("/auth/logout");
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
 export const getUser = async () => {
   try {
-    return ({ data } = await apiClient.get("/user/current"));
+    return ({ data } = await apiClient.get("/users/current"));
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };

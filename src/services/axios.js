@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "localhost:8080",
+  baseURL: "/api",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
@@ -19,15 +19,16 @@ apiClient.interceptors.request.use(
 );
 
 apiClient.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
     if (
       error.response &&
-      (error.response.status === "401" || error.response.status === "403")
+      (error.response.status === "401" || error.response.status === "403") &&
+      !error.config?.url?.startsWith("/auth/")
     ) {
-      window.location.href = "/login";
+      // Lưu URL hiện tại để redirect sau khi đăng nhập lại
+      localStorage.setItem("redirectAfterLogin", window.location.pathname);
+      window.location.assign("/login");
     }
     return Promise.reject(error);
   }

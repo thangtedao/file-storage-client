@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { Form } from "react-router-dom";
-import { login } from "../services/authService";
+import { register } from "../services/authService";
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await login(username, password);
+      await register({ username, email, password });
     } catch (error) {
       console.log(error);
     }
@@ -28,6 +29,15 @@ const LoginPage = () => {
         </label>
 
         <label>
+          email
+          <input
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </label>
+
+        <label>
           password
           <input
             name="password"
@@ -42,4 +52,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

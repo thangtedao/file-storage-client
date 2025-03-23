@@ -7,7 +7,7 @@ const RootContext = createContext();
 
 const Root = () => {
   const data = useLoaderData();
-  const [user, setUser] = useState(data.user);
+  const [user, setUser] = useState(data?.user || null);
   const navigation = useNavigation();
 
   return (

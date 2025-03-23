@@ -24,14 +24,6 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "login",
-        element: <LoginPage />,
-      },
-      {
-        path: "register",
-        element: <LoginPage />,
-      },
-      {
         path: "files",
         element: <FilesPage />,
       },
@@ -48,6 +40,14 @@ const router = createBrowserRouter([
         element: <SearchPage />,
       },
     ],
+  },
+  {
+    path: "login",
+    element: <LoginPage />,
+  },
+  {
+    path: "register",
+    element: <LoginPage />,
   },
   {
     path: "/share",
