@@ -3,54 +3,29 @@ import Panel from "../components/Panel";
 import Table from "../components/Table";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
+import {
+  emptyTrash,
+  getDeletedFiles,
+  permanentDeleteFile,
+  restoreFile,
+} from "../services/fileService";
+import { useLoaderData } from "react-router-dom";
+
+export const loader = async () => {
+  try {
+    const data = await getDeletedFiles();
+    return data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
 
 const TrashPage = () => {
-  const [showModal, setShowModal] = useState(false);
+  const data = useLoaderData();
 
-  const files = [
-    {
-      id: 1,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "thang",
-      fileType: "pdf",
-    },
-    {
-      id: 2,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "nam",
-      fileType: "pdf",
-    },
-    {
-      id: 3,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "cuong",
-      fileType: "pdf",
-    },
-    {
-      id: 4,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "vy",
-      fileType: "pdf",
-    },
-    {
-      id: 5,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "bi",
-      fileType: "pdf",
-    },
-    {
-      id: 6,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "tan",
-      fileType: "pdf",
-    },
-  ];
+  const [files, setFiles] = useState(data || []);
+  const [showModal, setShowModal] = useState(false);
 
   const handleClose = () => {
     setShowModal(false);
@@ -62,6 +37,33 @@ const TrashPage = () => {
 
   const handleDelete = () => {
     console.log("Deleted");
+  };
+
+  const handleRestore = async (id) => {
+    try {
+      await restoreFile(id);
+      setFiles((prev) => prev.filter((value) => value.id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handlePermanentDelete = async (id) => {
+    try {
+      await permanentDeleteFile(id);
+      setFiles((prev) => prev.filter((value) => value.id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEmptyTrash = async () => {
+    try {
+      await emptyTrash();
+      setFiles([]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const actionBar = (
@@ -78,7 +80,7 @@ const TrashPage = () => {
   const config = [
     {
       label: "Name",
-      render: (file) => file.fileName,
+      render: (file) => file.originalFileName,
     },
     {
       label: "Owner",

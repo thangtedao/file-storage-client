@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import Table from "../components/Table";
 import Panel from "../components/Panel";
-import Modal from "../components/Modal";
-import Button from "../components/Button";
 import {
   HiOutlineDotsHorizontal,
   HiDownload,
@@ -11,97 +9,69 @@ import {
 } from "react-icons/hi";
 import FileMenu from "../components/FileMenu";
 import FileShareModal from "../components/FileShareModal";
+import {
+  deleteFile,
+  downloadFile,
+  getActiveFiles,
+} from "../services/fileService";
+import { useLoaderData } from "react-router-dom";
+import { saveAs } from "file-saver";
+
+export const loader = async () => {
+  try {
+    const data = await getActiveFiles();
+    return { data };
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
 
 const FilesPage = () => {
+  const { data } = useLoaderData();
+
+  const [files, setFiles] = useState(data || []);
   const [fileShare, setFileShare] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const files = [
-    {
-      id: 1,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "thang",
-      fileType: "pdf",
-    },
-    {
-      id: 2,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "nam",
-      fileType: "pdf",
-    },
-    {
-      id: 3,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "cuong",
-      fileType: "pdf",
-    },
-    {
-      id: 4,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "vy",
-      fileType: "pdf",
-    },
-    {
-      id: 5,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "bi",
-      fileType: "pdf",
-    },
-    {
-      id: 6,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "tan",
-      fileType: "pdf",
-    },
-    {
-      id: 7,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "thang",
-      fileType: "pdf",
-    },
-    {
-      id: 8,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "nam",
-      fileType: "pdf",
-    },
-    {
-      id: 9,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "cuong",
-      fileType: "pdf",
-    },
-    {
-      id: 10,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "vy",
-      fileType: "pdf",
-    },
-    {
-      id: 11,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "bi",
-      fileType: "pdf",
-    },
-    {
-      id: 12,
-      fileName: "Tai lieu Tieng Anh",
-      fileSize: 100,
-      owner: "tan",
-      fileType: "pdf",
-    },
-  ];
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  // console.log(data);
+
+  const handleDownload = async (id) => {
+    setIsDownloading(true);
+    try {
+      const response = await downloadFile(id);
+
+      // Tạo Blob từ dữ liệu và download file
+      const blob = new Blob([response.data]);
+
+      // Lấy tên file từ header
+      let downloadFileName = fileName;
+      const contentDisposition = response.headers["content-disposition"];
+      if (contentDisposition) {
+        const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+        if (fileNameMatch.length === 2) {
+          downloadFileName = fileNameMatch[1];
+        }
+      }
+
+      saveAs(blob, downloadFileName);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteFile(id);
+      setFiles((prev) => prev.filter((value) => value.id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -115,7 +85,7 @@ const FilesPage = () => {
         </div>
       ),
       onClick: (file) => {
-        console.log("Download" + file.owner);
+        handleDownload(file.id);
       },
     },
     {
@@ -136,7 +106,7 @@ const FilesPage = () => {
         </div>
       ),
       onClick: (file) => {
-        console.log("Delete" + file.owner);
+        handleDelete(file.id);
       },
     },
     {
@@ -154,7 +124,7 @@ const FilesPage = () => {
   const config = [
     {
       label: "Name",
-      render: (file) => <div className="">{file.fileName}</div>,
+      render: (file) => <div className="">{file.originalFileName}</div>,
     },
     {
       label: "Owner",
@@ -166,7 +136,7 @@ const FilesPage = () => {
     },
     {
       label: "Size",
-      render: (file) => file.fileSize + " MB",
+      render: (file) => Math.floor(file.fileSize / 1024) + " MB",
     },
     {
       label: "",

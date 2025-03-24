@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
 import Button from "./Button";
 import { HiTrash } from "react-icons/hi";
+import { getSharingInfo, shareFile } from "../services/fileService";
 
 const FileShareModal = ({ onClose, fileShare }) => {
   const [emails, setEmails] = useState([]);
@@ -9,10 +10,20 @@ const FileShareModal = ({ onClose, fileShare }) => {
   const [emailErr, setEmailErr] = useState("");
   const [url, setUrl] = useState("");
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getSharingInfo(fileShare.id);
+      setUrl(data.shareUrl || "");
+      setEmails(data.emails?.slice(1) || []);
+    };
+
+    fetchData();
+  }, []);
+
   const handleAdd = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setEmailErr("Email không hợp lệ!");
+      setEmailErr("Invalid email!!!");
       return;
     } else {
       setEmailErr("");
@@ -31,7 +42,13 @@ const FileShareModal = ({ onClose, fileShare }) => {
 
   const handleShare = async () => {
     if (emails.length <= 0) return;
-    setUrl("https://www.youtube.com/watch?v=iDgoqe-v-io");
+    try {
+      const token = await shareFile(fileShare.id, { emails });
+      console.log(token);
+      setUrl(token);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const actionBar = (
@@ -47,14 +64,14 @@ const FileShareModal = ({ onClose, fileShare }) => {
       key={mail}
       className="flex items-center px-2 gap-3 border border-gray-300 rounded-full h-8"
     >
-      {mail}{" "}
+      {mail}
       <HiTrash className="cursor-pointer" onClick={() => handleDelete(mail)} />
     </div>
   ));
 
   return (
     <Modal onClose={onClose} actionBar={actionBar}>
-      <div className="text-xl">Share "{fileShare.fileName}"</div>
+      <div className="text-xl">Share "{fileShare.originalFileName}"</div>
 
       <div className="flex flex-col gap-1">
         <div className="flex justify-between gap-2">

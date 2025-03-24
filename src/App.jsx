@@ -1,6 +1,6 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Root from "./pages/root/Root";
+import Root from "./pages/Root";
 import Dashboard from "./pages/Dashboard";
 import FilesPage from "./pages/FilesPage";
 import RecentPage from "./pages/RecentPage";
@@ -10,7 +10,9 @@ import FileSharePage from "./pages/FileSharePage";
 import SearchPage from "./pages/SearchPage";
 import LoginPage from "./pages/LoginPage";
 
-import { rootLoader } from "./pages/root/rootLoader";
+import { loader as rootLoader } from "./pages/Root";
+import { loader as filesLoader } from "./pages/FilesPage";
+import { loader as trashLoader } from "./pages/TrashPage";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +28,7 @@ const router = createBrowserRouter([
       {
         path: "files",
         element: <FilesPage />,
+        loader: filesLoader,
       },
       {
         path: "recent",
@@ -34,6 +37,7 @@ const router = createBrowserRouter([
       {
         path: "trash",
         element: <TrashPage />,
+        loader: trashLoader,
       },
       {
         path: "search",

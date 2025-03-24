@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React, { useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Menu from "./Menu";
 import {
   GoPlus,
@@ -11,9 +11,30 @@ import {
   GoCloud,
 } from "react-icons/go";
 import ProgressBar from "./ProgressBar";
+import { uploadFile } from "../services/fileService";
 
 const SideBar = ({ className }) => {
+  const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
+
   const fileInputRef = useRef(null);
+
+  const handleFileChange = async (event) => {
+    setError(null);
+    const file = new FormData();
+    file.append("file", event.target.files[0]);
+
+    if (!event.target.files[0]) return;
+    try {
+      const response = await uploadFile(file);
+      console.log(response);
+      navigate("/files");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const links = [
     { label: "Dashboard", path: "/", icon: <GoHome /> },
@@ -73,7 +94,12 @@ const SideBar = ({ className }) => {
       </div>
 
       <Menu options={menuOptions} label={menuLabel} />
-      <input ref={fileInputRef} type="file" hidden />
+      <input
+        ref={fileInputRef}
+        type="file"
+        hidden
+        onChange={handleFileChange}
+      />
 
       <div className="flex flex-col gap-5 my-8">{renderedLinks}</div>
 
