@@ -136,7 +136,7 @@ const FilesPage = () => {
     },
     {
       label: "Size",
-      render: (file) => Math.floor(file.fileSize / 1024) + " MB",
+      render: (file) => Math.floor(file.fileSize / (1024 * 1024)) + " MB",
     },
     {
       label: "",
@@ -151,11 +151,18 @@ const FilesPage = () => {
   const keyFn = (file) => file.id;
 
   return (
-    <div className="flex flex-col">
+    <div className="w-full h-full flex flex-col">
       <p className="font-normal text-2xl mb-6">All Files</p>
-      <Panel className="border-none rounded-lg p-3">
-        <Table data={files} config={config} keyFn={keyFn} />
-      </Panel>
+      {files.length > 0 ? (
+        <Panel className="border-none rounded-lg p-3 overflow-visible">
+          <Table data={files} config={config} keyFn={keyFn} />
+        </Panel>
+      ) : (
+        <div className="w-full h-full flex justify-center items-center text-2xl">
+          Empty
+        </div>
+      )}
+
       {showModal && (
         <FileShareModal onClose={handleCloseModal} fileShare={fileShare} />
       )}

@@ -22,7 +22,7 @@ const NavBar = ({ className }) => {
     <div className={classes}>
       <SearchInput />
       <div>
-        <UserAvatar name="Thang" options={menuOptions} />
+        <UserAvatar options={menuOptions} />
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ import LoginPage from "./pages/LoginPage";
 import { loader as rootLoader } from "./pages/Root";
 import { loader as filesLoader } from "./pages/FilesPage";
 import { loader as trashLoader } from "./pages/TrashPage";
+import RegisterPage from "./pages/RegisterPage";
 
 const router = createBrowserRouter([
   {
@@ -51,7 +52,7 @@ const router = createBrowserRouter([
   },
   {
     path: "register",
-    element: <LoginPage />,
+    element: <RegisterPage />,
   },
   {
     path: "/share",

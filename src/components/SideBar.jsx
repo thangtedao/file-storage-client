@@ -12,14 +12,19 @@ import {
 } from "react-icons/go";
 import ProgressBar from "./ProgressBar";
 import { uploadFile } from "../services/fileService";
+import { useRootContext } from "../pages/Root";
 
 const SideBar = ({ className }) => {
+  const { user } = useRootContext();
+
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
   const fileInputRef = useRef(null);
+
+  const progress = Math.floor((user.usedStorage / user.storageLimit) * 100);
 
   const handleFileChange = async (event) => {
     setError(null);
@@ -107,8 +112,11 @@ const SideBar = ({ className }) => {
         <div className="flex items-center gap-2 font-medium text-2xl py-3">
           <GoCloud className="text-2xl" /> Storage
         </div>
-        <ProgressBar progress={70} color="#0066ff" />
-        <div>17 / 20 GB Used</div>
+        <ProgressBar progress={progress} color="#0066ff" />
+        <div>
+          {Math.floor(user.usedStorage / (1024 * 1024))} /{" "}
+          {Math.floor(user.storageLimit / (1024 * 1024))} MB Used
+        </div>
       </div>
     </div>
   );

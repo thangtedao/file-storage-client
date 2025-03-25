@@ -33,7 +33,7 @@ const Root = () => {
         <SideBar className="w-[16%] fixed top-0 left-0" />
         <div className="ml-[16%] w-[84%] flex flex-col">
           <NavBar className="fixed h-18 w-[84%] left-[16%]" />
-          <div className="px-8 mt-23">
+          <div className="w-full h-full px-8 mt-23">
             {navigation.state === "loading" ? <Loading /> : <Outlet />}
           </div>
         </div>

@@ -34,7 +34,7 @@ function FileMenu({ options, children, data }) {
   const renderedOptions = options.map((option, index) => {
     return (
       <div
-        className="hover:bg-gray-200 flex items-center h-full min-w-30 cursor-pointer p-2"
+        className="hover:bg-gray-200 flex items-center h-full cursor-pointer px-4 py-2"
         onClick={() => handleOptionClick(option)}
         key={index}
       >
@@ -45,14 +45,14 @@ function FileMenu({ options, children, data }) {
 
   return (
     <div ref={divEl}>
-      <div className="relative">
+      <div className="relative" onClick={handleClick}>
+        {children}
         {isOpen && (
-          <div className="absolute right-24 mt-3 border border-gray-300 rounded-lg overflow-hidden shadow bg-white">
+          <div className="absolute right-10 -mt-3 border border-gray-300 rounded-lg overflow-hidden shadow bg-white">
             {renderedOptions}
           </div>
         )}
       </div>
-      <div onClick={handleClick}>{children}</div>
     </div>
   );
 }

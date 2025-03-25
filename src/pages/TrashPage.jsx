@@ -10,6 +10,10 @@ import {
   restoreFile,
 } from "../services/fileService";
 import { useLoaderData } from "react-router-dom";
+import { IoReload } from "react-icons/io5";
+import { TbTrashOff } from "react-icons/tb";
+import FileMenu from "../components/FileMenu";
+import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 export const loader = async () => {
   try {
@@ -17,7 +21,6 @@ export const loader = async () => {
     return data;
   } catch (error) {
     console.log(error);
-    return error;
   }
 };
 
@@ -33,10 +36,6 @@ const TrashPage = () => {
 
   const handleOpen = () => {
     setShowModal(true);
-  };
-
-  const handleDelete = () => {
-    console.log("Deleted");
   };
 
   const handleRestore = async (id) => {
@@ -61,6 +60,7 @@ const TrashPage = () => {
     try {
       await emptyTrash();
       setFiles([]);
+      setShowModal(false);
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +68,7 @@ const TrashPage = () => {
 
   const actionBar = (
     <div className="flex justify-between w-full">
-      <Button danger rounded onClick={handleDelete}>
+      <Button danger rounded onClick={handleEmptyTrash}>
         OK
       </Button>
       <Button primary rounded onClick={handleClose}>
@@ -76,6 +76,30 @@ const TrashPage = () => {
       </Button>
     </div>
   );
+
+  const menuOptions = [
+    {
+      label: (
+        <div className="flex items-center gap-2">
+          <IoReload />
+          Restore
+        </div>
+      ),
+      onClick: (file) => {
+        handleRestore(file.id);
+      },
+    },
+    {
+      label: (
+        <div className="flex items-center gap-2">
+          <TbTrashOff /> Delete
+        </div>
+      ),
+      onClick: (file) => {
+        handlePermanentDelete(file.id);
+      },
+    },
+  ];
 
   const config = [
     {
@@ -92,23 +116,45 @@ const TrashPage = () => {
     },
     {
       label: "Size",
-      render: (file) => file.fileSize + " MB",
+      render: (file) => Math.floor(file.fileSize / (1024 * 1024)) + " MB",
+    },
+    {
+      label: "",
+      render: (file) => (
+        <FileMenu options={menuOptions} data={file}>
+          <HiOutlineDotsHorizontal className="cursor-pointer" />
+        </FileMenu>
+      ),
     },
   ];
 
   const keyFn = (file) => file.id;
 
   return (
-    <div className="flex flex-col">
+    <div className="w-full h-full flex flex-col">
       <div className="flex justify-between">
         <div className="font-normal text-2xl mb-6">Trash</div>
-        <Button primary rounded className="h-10" onClick={handleOpen}>
+        <Button
+          primary
+          rounded
+          className="h-10"
+          onClick={handleOpen}
+          disabled={files.length <= 0}
+        >
           Clear Trash
         </Button>
       </div>
-      <Panel className="border-none rounded-lg p-3">
-        <Table data={files} config={config} keyFn={keyFn} />
-      </Panel>
+
+      {files.length > 0 ? (
+        <Panel className="border-none rounded-lg p-3 overflow-visible">
+          <Table data={files} config={config} keyFn={keyFn} />
+        </Panel>
+      ) : (
+        <div className="w-full h-full flex justify-center items-center text-2xl">
+          Empty
+        </div>
+      )}
+
       {showModal && (
         <Modal onClose={handleClose} actionBar={actionBar}>
           <div className="text-2xl font-bold">Are you sure ?</div>
