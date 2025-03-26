@@ -22,7 +22,7 @@ export const login = async (username, password) => {
 
 export const logout = async () => {
   try {
-    await apiClient.get("/auth/logout");
+    await apiClient.post("/auth/logout");
   } catch (error) {
     throw error;
   }

@@ -2,12 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import Button from "./Button";
 import { logout } from "../services/authService";
 import { useRootContext } from "../pages/Root";
+import { useNavigate } from "react-router-dom";
 
 const UserAvatar = () => {
   const { user } = useRootContext();
+  const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
-  const divEl = useRef();
+  const divEl = useRef(null);
 
   useEffect(() => {
     const handler = (event) => {
@@ -20,20 +22,23 @@ const UserAvatar = () => {
       }
     };
 
-    document.addEventListener("click", handler, true);
+    document.addEventListener("click", handler);
 
     return () => {
       document.removeEventListener("click", handler);
     };
   }, []);
 
-  const handleClick = () => {
+  const handleClick = (event) => {
+    event.stopPropagation();
     setIsOpen(!isOpen);
   };
 
-  const handleSignOut = async () => {
+  const handleSignOut = async (event) => {
+    event.stopPropagation();
     try {
       await logout();
+      navigate("/login");
     } catch (error) {
       console.log(error);
     }
@@ -49,7 +54,10 @@ const UserAvatar = () => {
         {user?.username.charAt(0).toUpperCase()}
       </div>
       {isOpen && (
-        <div className="absolute mt-3 right-0 border border-gray-200 rounded-lg shadow w-80 bg-white p-5 flex flex-col items-center gap-3">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="absolute mt-3 right-0 border border-gray-200 rounded-lg shadow w-80 bg-white p-5 flex flex-col items-center gap-3"
+        >
           <div className="w-10 h-10 bg-gray-300 text-white flex items-center justify-center rounded-full text-lg font-bold">
             {user?.username.charAt(0).toUpperCase()}
           </div>

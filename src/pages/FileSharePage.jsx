@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiDownload } from "react-icons/hi";
 import Panel from "../components/Panel";
 import Table from "../components/Table";
 import { useLoaderData } from "react-router-dom";
+import { useRootContext } from "./Root";
 import {
-  downloadFile,
   downloadShareFile,
-  getActiveFiles,
+  getFilesShareWithMe,
 } from "../services/fileService";
 
 export const loader = async () => {
   try {
-    const data = await getActiveFiles();
+    const data = await getFilesShareWithMe();
+    console.log(data);
+
     return { data };
   } catch (error) {
     console.log(error);
@@ -20,10 +22,18 @@ export const loader = async () => {
 };
 
 const FileSharePage = () => {
+  const { user } = useRootContext();
   const { data } = useLoaderData();
 
   const [files, setFiles] = useState(data || []);
   const [isDownloading, setIsDownloading] = useState(false);
+
+  useEffect(() => {
+    const filterData = () => {
+      setFiles((prev) => prev.filter((value) => value.owner !== user.email));
+    };
+    filterData();
+  }, []);
 
   const handleDownload = async (token) => {
     setIsDownloading(true);
@@ -54,7 +64,7 @@ const FileSharePage = () => {
   const config = [
     {
       label: "Name",
-      render: (file) => <div className="">{file.originalFileName}</div>,
+      render: (file) => <div className="">{file.fileName}</div>,
     },
     {
       label: "Owner",
@@ -73,7 +83,7 @@ const FileSharePage = () => {
       render: (file) => (
         <HiDownload
           className="text-lg cursor-pointer"
-          // onClick={() => handleDownload(file.shareToken)}
+          onClick={() => handleDownload(file.shareToken)}
         />
       ),
     },

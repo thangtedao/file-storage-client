@@ -36,7 +36,7 @@ const FilesPage = () => {
 
   const [isDownloading, setIsDownloading] = useState(false);
 
-  // console.log(data);
+  console.log(data);
 
   const handleDownload = async (id) => {
     setIsDownloading(true);
@@ -124,7 +124,11 @@ const FilesPage = () => {
   const config = [
     {
       label: "Name",
-      render: (file) => <div className="">{file.originalFileName}</div>,
+      render: (file) => (
+        <div className="flex gap-2 items-center">
+          {file.share && <HiShare />} {file.originalFileName}
+        </div>
+      ),
     },
     {
       label: "Owner",

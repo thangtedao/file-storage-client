@@ -2,9 +2,16 @@ import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
 import Button from "./Button";
 import { HiTrash } from "react-icons/hi";
-import { getSharingInfo, shareFile } from "../services/fileService";
+import {
+  getSharingInfo,
+  removeShareFile,
+  shareFile,
+} from "../services/fileService";
+import { useRootContext } from "../pages/Root";
 
 const FileShareModal = ({ onClose, fileShare }) => {
+  const { user } = useRootContext();
+
   const [emails, setEmails] = useState([]);
   const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState("");
@@ -14,7 +21,7 @@ const FileShareModal = ({ onClose, fileShare }) => {
     const fetchData = async () => {
       const data = await getSharingInfo(fileShare.id);
       setUrl(data.shareUrl || "");
-      setEmails(data.emails?.slice(1) || []);
+      setEmails(data.emails?.filter((value) => value !== user.email) || []);
     };
 
     fetchData();
@@ -51,8 +58,22 @@ const FileShareModal = ({ onClose, fileShare }) => {
     }
   };
 
+  const handleRemoveShare = async () => {
+    try {
+      const res = await removeShareFile(fileShare.id);
+      console.log(res);
+
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const actionBar = (
     <div>
+      <Button primary rounded onClick={handleRemoveShare}>
+        Remove share
+      </Button>
       <Button primary rounded onClick={onClose}>
         Cancel
       </Button>

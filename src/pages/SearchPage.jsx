@@ -10,12 +10,13 @@ import {
 import FileMenu from "../components/FileMenu";
 import FileShareModal from "../components/FileShareModal";
 import { deleteFile, downloadFile, searchFiles } from "../services/fileService";
-import { useLoaderData } from "react-router-dom";
+import { redirect, useLoaderData } from "react-router-dom";
 import { saveAs } from "file-saver";
 
 export const loader = async (request) => {
   const { term } = request.params;
   try {
+    if (term === "") return redirect("/files");
     const data = await searchFiles(term);
     return { data, term };
   } catch (error) {

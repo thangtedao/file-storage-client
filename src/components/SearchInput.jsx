@@ -8,6 +8,7 @@ const SearchInput = () => {
   const [seachTerm, setSearchTerm] = useState("");
 
   const handleSearch = () => {
+    if (seachTerm === "") return;
     navigate(`/search/${seachTerm}`);
   };
 
@@ -16,6 +17,7 @@ const SearchInput = () => {
   };
 
   const handleKeyDown = (event) => {
+    if (seachTerm === "") return;
     if (event.key === "Enter") {
       navigate(`/search/${seachTerm}`);
     }

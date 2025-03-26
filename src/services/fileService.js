@@ -92,8 +92,17 @@ export const shareFile = async (id, emails) => {
 
 export const downloadShareFile = async (token) => {
   try {
-    const response = await apiClient.post(`/files/${token}/download`);
+    const response = await apiClient.get(`/files/${token}/download`);
     return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const removeShareFile = async (fileId) => {
+  try {
+    const response = await apiClient.delete(`/files/share/${fileId}`);
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -102,6 +111,15 @@ export const downloadShareFile = async (token) => {
 export const getSharingInfo = async (id) => {
   try {
     const response = await apiClient.get(`/files/${id}/share-info`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getFilesShareWithMe = async () => {
+  try {
+    const response = await apiClient.get(`/files/share`);
     return response.data;
   } catch (error) {
     throw error;
