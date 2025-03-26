@@ -150,7 +150,7 @@ const TrashPage = () => {
           <Table data={files} config={config} keyFn={keyFn} />
         </Panel>
       ) : (
-        <div className="w-full h-full flex justify-center items-center text-2xl">
+        <div className="w-full h-full flex justify-center items-center text-2xl mb-30">
           Empty
         </div>
       )}

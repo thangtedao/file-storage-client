@@ -13,7 +13,10 @@ import LoginPage from "./pages/LoginPage";
 import { loader as rootLoader } from "./pages/Root";
 import { loader as filesLoader } from "./pages/FilesPage";
 import { loader as trashLoader } from "./pages/TrashPage";
+import { loader as shareLoader } from "./pages/FileSharePage";
+import { loader as searchLoader } from "./pages/SearchPage";
 import RegisterPage from "./pages/RegisterPage";
+import PublicSharePage from "./pages/PublicSharePage";
 
 const router = createBrowserRouter([
   {
@@ -41,8 +44,14 @@ const router = createBrowserRouter([
         loader: trashLoader,
       },
       {
-        path: "search",
+        path: "search/:term",
         element: <SearchPage />,
+        loader: searchLoader,
+      },
+      {
+        path: "share",
+        element: <FileSharePage />,
+        loader: shareLoader,
       },
     ],
   },
@@ -55,8 +64,8 @@ const router = createBrowserRouter([
     element: <RegisterPage />,
   },
   {
-    path: "/share",
-    element: <FileSharePage />,
+    path: "/public/:token/share",
+    element: <PublicSharePage />,
   },
 ]);
 

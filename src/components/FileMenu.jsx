@@ -45,14 +45,14 @@ function FileMenu({ options, children, data }) {
 
   return (
     <div ref={divEl}>
-      <div className="relative" onClick={handleClick}>
-        {children}
+      <div className="relative w-3">
         {isOpen && (
-          <div className="absolute right-10 -mt-3 border border-gray-300 rounded-lg overflow-hidden shadow bg-white">
+          <div className="absolute right-10 border border-gray-300 rounded-lg overflow-hidden shadow bg-white">
             {renderedOptions}
           </div>
         )}
       </div>
+      <div onClick={handleClick}>{children}</div>
     </div>
   );
 }

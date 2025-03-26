@@ -90,9 +90,27 @@ export const shareFile = async (id, emails) => {
   }
 };
 
+export const downloadShareFile = async (token) => {
+  try {
+    const response = await apiClient.post(`/files/${token}/download`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getSharingInfo = async (id) => {
   try {
     const response = await apiClient.get(`/files/${id}/share-info`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const searchFiles = async (term) => {
+  try {
+    const response = await apiClient.get(`/files/search/${term}`);
     return response.data;
   } catch (error) {
     throw error;

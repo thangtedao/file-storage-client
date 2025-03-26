@@ -13,6 +13,7 @@ import {
 import ProgressBar from "./ProgressBar";
 import { uploadFile } from "../services/fileService";
 import { useRootContext } from "../pages/Root";
+import { HiShare } from "react-icons/hi";
 
 const SideBar = ({ className }) => {
   const { user } = useRootContext();
@@ -44,9 +45,9 @@ const SideBar = ({ className }) => {
   const links = [
     { label: "Dashboard", path: "/", icon: <GoHome /> },
     { label: "Files", path: "/files", icon: <GoFile /> },
-    { label: "Recent", path: "/recent", icon: <GoClock /> },
+    // { label: "Recent", path: "/recent", icon: <GoClock /> },
     { label: "Trash", path: "/trash", icon: <GoTrash /> },
-    { label: "Share", path: "/share", icon: <GoTrash /> },
+    { label: "Share", path: "/share", icon: <HiShare /> },
   ];
 
   const renderedLinks = links.map((link) => {
