@@ -11,6 +11,7 @@ export const getFiles = async () => {
 
 export const getActiveFiles = async () => {
   try {
+    await pause(500);
     const response = await apiClient.get("/files/active");
     return response.data;
   } catch (error) {
@@ -133,4 +134,11 @@ export const searchFiles = async (term) => {
   } catch (error) {
     throw error;
   }
+};
+
+// DEV ONLY !!!
+const pause = (duration) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, duration);
+  });
 };

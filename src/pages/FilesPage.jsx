@@ -14,7 +14,7 @@ import {
   downloadFile,
   getActiveFiles,
 } from "../services/fileService";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
 import { saveAs } from "file-saver";
 
 export const loader = async () => {
@@ -35,8 +35,6 @@ const FilesPage = () => {
   const [showModal, setShowModal] = useState(false);
 
   const [isDownloading, setIsDownloading] = useState(false);
-
-  console.log(data);
 
   const handleDownload = async (id) => {
     setIsDownloading(true);
@@ -109,16 +107,6 @@ const FilesPage = () => {
         handleDelete(file.id);
       },
     },
-    {
-      label: (
-        <div className="flex items-center gap-2">
-          <HiTrash /> Nothing
-        </div>
-      ),
-      onClick: () => {
-        console.log("Chúng ta không thuộc về nhau");
-      },
-    },
   ];
 
   const config = [
@@ -168,7 +156,7 @@ const FilesPage = () => {
       )}
 
       {showModal && (
-        <FileShareModal onClose={handleCloseModal} fileShare={fileShare} />
+        <FileShareModal onClose={handleCloseModal} file={fileShare} />
       )}
     </div>
   );

@@ -14,6 +14,7 @@ import ProgressBar from "./ProgressBar";
 import { uploadFile } from "../services/fileService";
 import { useRootContext } from "../pages/Root";
 import { HiShare } from "react-icons/hi";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const SideBar = ({ className }) => {
   const { user } = useRootContext();
@@ -29,17 +30,19 @@ const SideBar = ({ className }) => {
 
   const handleFileChange = async (event) => {
     setError(null);
+    setIsUploading(true);
     const file = new FormData();
     file.append("file", event.target.files[0]);
 
     if (!event.target.files[0]) return;
-    try {
-      const response = await uploadFile(file);
-      console.log(response);
-      navigate("/files");
-    } catch (error) {
-      console.log(error);
-    }
+    await uploadFile(file)
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsUploading(false);
+        navigate("/files");
+      });
   };
 
   const links = [
@@ -81,8 +84,12 @@ const SideBar = ({ className }) => {
     },
   ];
 
-  const menuLabel = (
-    <div className="flex justify-center items-center gap-1">
+  const menuLabel = isUploading ? (
+    <div className="flex justify-center items-center gap-1 h-6">
+      <AiOutlineLoading3Quarters className="text-xl animate-spin" />
+    </div>
+  ) : (
+    <div className="flex justify-center items-center gap-1 h-6">
       <GoPlus className="text-xl" />
       <span>New</span>
     </div>

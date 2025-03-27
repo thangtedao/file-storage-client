@@ -12,12 +12,9 @@ import {
 export const loader = async () => {
   try {
     const data = await getFilesShareWithMe();
-    console.log(data);
-
     return { data };
   } catch (error) {
     console.log(error);
-    return error;
   }
 };
 
@@ -93,7 +90,7 @@ const FileSharePage = () => {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <p className="font-normal text-2xl mb-6">Được share với tôi</p>
+      <p className="font-normal text-2xl mb-6">Shared with me</p>
       {files.length > 0 ? (
         <Panel className="border-none rounded-lg p-3 overflow-visible">
           <Table data={files} config={config} keyFn={keyFn} />

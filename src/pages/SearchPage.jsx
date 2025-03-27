@@ -107,16 +107,6 @@ const SearchPage = () => {
         handleDelete(file.id);
       },
     },
-    {
-      label: (
-        <div className="flex items-center gap-2">
-          <HiTrash /> Nothing
-        </div>
-      ),
-      onClick: () => {
-        console.log("Chúng ta không thuộc về nhau");
-      },
-    },
   ];
 
   const config = [

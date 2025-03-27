@@ -9,7 +9,7 @@ import {
 } from "../services/fileService";
 import { useRootContext } from "../pages/Root";
 
-const FileShareModal = ({ onClose, fileShare }) => {
+const FileShareModal = ({ onClose, file }) => {
   const { user } = useRootContext();
 
   const [emails, setEmails] = useState([]);
@@ -17,9 +17,11 @@ const FileShareModal = ({ onClose, fileShare }) => {
   const [emailErr, setEmailErr] = useState("");
   const [url, setUrl] = useState("");
 
+  const [isSharing, setIsSharing] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getSharingInfo(fileShare.id);
+      const data = await getSharingInfo(file.id);
       setUrl(data.shareUrl || "");
       setEmails(data.emails?.filter((value) => value !== user.email) || []);
     };
@@ -38,7 +40,6 @@ const FileShareModal = ({ onClose, fileShare }) => {
     if (emails.includes(email) || email === "") {
       return;
     }
-    console.log("Calling api checking email...");
     setEmails([...emails, email]);
     setEmail("");
   };
@@ -49,31 +50,31 @@ const FileShareModal = ({ onClose, fileShare }) => {
 
   const handleShare = async () => {
     if (emails.length <= 0) return;
-    try {
-      const token = await shareFile(fileShare.id, { emails });
-      console.log(token);
-      setUrl(token);
-    } catch (error) {
-      console.log(error);
-    }
+    setIsSharing(true);
+    await shareFile(file.id, { emails })
+      .then((token) => {
+        setUrl(token);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsSharing(false);
+      });
   };
 
   const handleRemoveShare = async () => {
-    try {
-      const res = await removeShareFile(fileShare.id);
-      console.log(res);
-
-      onClose();
-    } catch (error) {
-      console.log(error);
-    }
+    const res = await removeShareFile(file.id)
+      .then(() => {
+        onClose();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const actionBar = (
     <div>
-      <Button primary rounded onClick={handleRemoveShare}>
-        Remove share
-      </Button>
       <Button primary rounded onClick={onClose}>
         Cancel
       </Button>
@@ -92,7 +93,7 @@ const FileShareModal = ({ onClose, fileShare }) => {
 
   return (
     <Modal onClose={onClose} actionBar={actionBar}>
-      <div className="text-xl">Share "{fileShare.originalFileName}"</div>
+      <div className="text-xl">Share "{file.originalFileName}"</div>
 
       <div className="flex flex-col gap-1">
         <div className="flex justify-between gap-2">
@@ -115,13 +116,23 @@ const FileShareModal = ({ onClose, fileShare }) => {
 
       <div className="flex justify-between gap-2">
         <input
-          className="focus:outline-none w-[80%] px-3 border border-gray-300 rounded-lg"
+          className="focus:outline-none w-[70%] px-3 border border-gray-300 rounded-lg"
           value={url}
           readOnly
         />
-        <Button primary rounded onClick={handleShare}>
-          Share
-        </Button>
+        <div className="flex gap-3">
+          <Button
+            primary
+            disabled={file.share}
+            rounded
+            onClick={handleRemoveShare}
+          >
+            Remove
+          </Button>
+          <Button primary rounded loading={isSharing} onClick={handleShare}>
+            Save
+          </Button>
+        </div>
       </div>
     </Modal>
   );
