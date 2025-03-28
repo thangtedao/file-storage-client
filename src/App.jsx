@@ -27,7 +27,8 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Dashboard />,
+        element: <FilesPage />,
+        loader: filesLoader,
       },
       {
         path: "files",

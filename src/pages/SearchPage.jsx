@@ -12,6 +12,7 @@ import FileShareModal from "../components/FileShareModal";
 import { deleteFile, downloadFile, searchFiles } from "../services/fileService";
 import { redirect, useLoaderData } from "react-router-dom";
 import { saveAs } from "file-saver";
+import { formatFileSize } from "../utils/formatFileSize";
 
 export const loader = async (request) => {
   const { term } = request.params;
@@ -124,7 +125,7 @@ const SearchPage = () => {
     },
     {
       label: "Size",
-      render: (file) => Math.floor(file.fileSize / (1024 * 1024)) + " MB",
+      render: (file) => formatFileSize(file.fileSize),
     },
     {
       label: "",

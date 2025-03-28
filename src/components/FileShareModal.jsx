@@ -92,7 +92,7 @@ const FileShareModal = ({ onClose, file }) => {
   ));
 
   return (
-    <Modal onClose={onClose} actionBar={actionBar}>
+    <Modal onClose={onClose} actionBar={actionBar} className="w-[50%] h-[55%]">
       <div className="text-xl">Share "{file.originalFileName}"</div>
 
       <div className="flex flex-col gap-1">
@@ -114,6 +114,7 @@ const FileShareModal = ({ onClose, file }) => {
         {renderedEmails}
       </div>
 
+      <div>Link share:</div>
       <div className="flex justify-between gap-2">
         <input
           className="focus:outline-none w-[70%] px-3 border border-gray-300 rounded-lg"

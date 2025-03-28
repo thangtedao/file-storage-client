@@ -13,11 +13,11 @@ const Modal = ({ onClose, children, actionBar, className }) => {
 
   const classes = classNames(
     className,
-    "fixed inset-y-40 inset-x-100 p-10 bg-white min-w-80 min-h-80"
+    "rounded-lg p-10 bg-white min-w-80 min-h-50 z-99"
   );
 
   return ReactDOM.createPortal(
-    <div className="flex justify-center items-center">
+    <div className=" fixed inset-0 flex justify-center items-center">
       <div
         onClick={onClose}
         className="fixed inset-0 bg-gray-300 opacity-30"

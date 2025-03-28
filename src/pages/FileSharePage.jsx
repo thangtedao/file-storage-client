@@ -8,6 +8,7 @@ import {
   downloadShareFile,
   getFilesShareWithMe,
 } from "../services/fileService";
+import { formatFileSize } from "../utils/formatFileSize";
 
 export const loader = async () => {
   try {
@@ -73,7 +74,7 @@ const FileSharePage = () => {
     },
     {
       label: "Size",
-      render: (file) => Math.floor(file.fileSize / (1024 * 1024)) + " MB",
+      render: (file) => formatFileSize(file.fileSize),
     },
     {
       label: "",

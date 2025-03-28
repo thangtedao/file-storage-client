@@ -14,6 +14,7 @@ import { IoReload } from "react-icons/io5";
 import { TbTrashOff } from "react-icons/tb";
 import FileMenu from "../components/FileMenu";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { formatFileSize } from "../utils/formatFileSize";
 
 export const loader = async () => {
   try {
@@ -116,7 +117,7 @@ const TrashPage = () => {
     },
     {
       label: "Size",
-      render: (file) => Math.floor(file.fileSize / (1024 * 1024)) + " MB",
+      render: (file) => formatFileSize(file.fileSize),
     },
     {
       label: "",
@@ -156,7 +157,11 @@ const TrashPage = () => {
       )}
 
       {showModal && (
-        <Modal onClose={handleClose} actionBar={actionBar}>
+        <Modal
+          onClose={handleClose}
+          actionBar={actionBar}
+          className="w-80 h-40"
+        >
           <div className="text-2xl font-bold">Are you sure ?</div>
         </Modal>
       )}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { HiDownload } from "react-icons/hi";
 import Panel from "../components/Panel";
 import Table from "../components/Table";
+import { formatFileSize } from "../utils/formatFileSize";
 
 const PublicSharePage = () => {
   const [files, setFiles] = useState([]);
@@ -37,7 +38,7 @@ const PublicSharePage = () => {
     },
     {
       label: "Size",
-      render: (file) => file.fileSize + " MB",
+      render: (file) => formatFileSize(file.fileSize),
     },
     {
       label: "",

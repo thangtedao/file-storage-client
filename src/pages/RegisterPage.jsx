@@ -60,6 +60,7 @@ const RegisterPage = () => {
 
         <div className="w-full px-3 py-2 rounded-lg border border-gray-300">
           <input
+            type="password"
             className="focus:outline-none w-full"
             name="password"
             placeholder="Password"

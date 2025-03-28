@@ -15,6 +15,7 @@ import { uploadFile } from "../services/fileService";
 import { useRootContext } from "../pages/Root";
 import { HiShare } from "react-icons/hi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { formatFileSize } from "../utils/formatFileSize";
 
 const SideBar = ({ className }) => {
   const { user } = useRootContext();
@@ -29,12 +30,12 @@ const SideBar = ({ className }) => {
   const progress = Math.floor((user.usedStorage / user.storageLimit) * 100);
 
   const handleFileChange = async (event) => {
+    if (!event.target.files[0]) return;
     setError(null);
     setIsUploading(true);
     const file = new FormData();
     file.append("file", event.target.files[0]);
 
-    if (!event.target.files[0]) return;
     await uploadFile(file)
       .catch((err) => {
         console.log(err);
@@ -46,7 +47,7 @@ const SideBar = ({ className }) => {
   };
 
   const links = [
-    { label: "Dashboard", path: "/", icon: <GoHome /> },
+    // { label: "Dashboard", path: "/", icon: <GoHome /> },
     { label: "Files", path: "/files", icon: <GoFile /> },
     // { label: "Recent", path: "/recent", icon: <GoClock /> },
     { label: "Trash", path: "/trash", icon: <GoTrash /> },
@@ -122,8 +123,8 @@ const SideBar = ({ className }) => {
         </div>
         <ProgressBar progress={progress} color="#0066ff" />
         <div>
-          {Math.floor(user.usedStorage / (1024 * 1024))} /{" "}
-          {Math.floor(user.storageLimit / (1024 * 1024))} MB Used
+          {(user.usedStorage / 1_048_576).toFixed(0)} /{" "}
+          {formatFileSize(user.storageLimit)} Used
         </div>
       </div>
     </div>

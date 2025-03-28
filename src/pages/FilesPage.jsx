@@ -16,6 +16,7 @@ import {
 } from "../services/fileService";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
 import { saveAs } from "file-saver";
+import { formatFileSize } from "../utils/formatFileSize";
 
 export const loader = async () => {
   try {
@@ -128,7 +129,7 @@ const FilesPage = () => {
     },
     {
       label: "Size",
-      render: (file) => Math.floor(file.fileSize / (1024 * 1024)) + " MB",
+      render: (file) => formatFileSize(file.fileSize),
     },
     {
       label: "",
